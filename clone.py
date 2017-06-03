@@ -49,8 +49,9 @@ X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
 from keras.models import Sequential
+from keras.layers import ELU, Dropout
 from keras.layers.core import Flatten, Dense, Lambda
-from keras.layers.convolutional import Cropping2D
+from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 model.add(Cropping2D(cropping=((80, 25), (0,0)), input_shape=(160,320,3)))
@@ -70,6 +71,6 @@ model.add(ELU())
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=5)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
 
 model.save('model.h5')
