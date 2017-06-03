@@ -49,11 +49,12 @@ X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
 from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Lambda, Cropping2D
+from keras.layers.core import Flatten, Dense, Lambda
+from keras.layers.convolutional import Cropping2D
 
 model = Sequential()
-model.add(Cropping2D(cropping=((80, 25), (0,0))))
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
+model.add(Cropping2D(cropping=((80, 25), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5))
 model.add(Flatten())
 model.add(Dense(1))
 
