@@ -22,7 +22,7 @@ for line in lines:
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
-		if random <= 4:
+		if random >= 3:
 			valid = False
 
 	if valid:
