@@ -11,37 +11,31 @@ with open('Training_data/driving_log.csv') as csvfile:
 images = []
 measurements = []
 for line in lines:
-	ignore = True
+
 	center_image_path = line[0]
 	center_image_filename = center_image_path.split('\\')[-1]
 	center_image_full_path = 'Training_data/IMG/' + center_image_filename
 	center_image = cv2.imread(center_image_full_path)
 	images.append(center_image)
 	measurement = float(line[3])
-	if measurement == float(0):
-		rand_num = np.random.randint(10)
-		if rand_num <= 6: #30% chance of staying if it's a 0
-			ignore = False
+	measurements.append(measurement)
 
-	if not ignore:
-		measurements.append(measurement)
+	left_image_path = line[1]
+	left_image_filename = left_image_path.split('\\')[-1]
+	left_image_full_path = 'Training_data/IMG/' + left_image_filename
+	left_image = cv2.imread(left_image_full_path)
+	images.append(left_image)
+	measurement = float(line[3]) + 0.08
+	measurements.append(measurement)
 
-		left_image_path = line[1]
-		left_image_filename = left_image_path.split('\\')[-1]
-		left_image_full_path = 'Training_data/IMG/' + left_image_filename
-		left_image = cv2.imread(left_image_full_path)
-		images.append(left_image)
-		measurement = float(line[3]) + 0.08
-		measurements.append(measurement)
-
-		right_image_path = line[2]
-		right_image_filename = right_image_path.split('\\')[-1]
-		#print(right_image_filename)
-		right_image_full_path = 'Training_data/IMG/' + right_image_filename
-		right_image = cv2.imread(right_image_full_path)
-		images.append(right_image)
-		measurement = float(line[3]) - 0.15
-		measurements.append(measurement)
+	right_image_path = line[2]
+	right_image_filename = right_image_path.split('\\')[-1]
+	#print(right_image_filename)
+	right_image_full_path = 'Training_data/IMG/' + right_image_filename
+	right_image = cv2.imread(right_image_full_path)
+	images.append(right_image)
+	measurement = float(line[3]) - 0.12
+	measurements.append(measurement)
 
 
 augmented_images, augmented_measurements = [], []
