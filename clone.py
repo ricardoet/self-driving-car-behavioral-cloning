@@ -34,7 +34,7 @@ for line in lines:
 	right_image_full_path = 'Training_data/IMG/' + right_image_filename
 	right_image = cv2.imread(right_image_full_path)
 	images.append(right_image)
-	measurement = float(line[3]) - 0.08
+	measurement = float(line[3]) - 0.15
 	measurements.append(measurement)
 
 
