@@ -20,7 +20,7 @@ for line in lines:
 	measurement = float(line[3])
 	if measurement == float(0):
 		rand_num = np.random.randint(10)
-		if rand_num <= 3: #30% chance of staying if it's a 0
+		if rand_num <= 6: #30% chance of staying if it's a 0
 			ignore = False
 
 	if not ignore:
