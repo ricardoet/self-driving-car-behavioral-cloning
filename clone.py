@@ -1,6 +1,7 @@
 import csv
 import cv2
 import numpy as np
+from random import randint
 
 lines = []
 with open('Training_data/driving_log.csv') as csvfile:
@@ -12,30 +13,41 @@ images = []
 measurements = []
 for line in lines:
 
+	valid = True
 	center_image_path = line[0]
 	center_image_filename = center_image_path.split('\\')[-1]
 	center_image_full_path = 'Training_data/IMG/' + center_image_filename
 	center_image = cv2.imread(center_image_full_path)
 	images.append(center_image)
 	measurement = float(line[3])
-	measurements.append(measurement)
+	if measurement == float(0):
+		random = randint(0,9)
+		if random <= 4:
+			valid = False
 
-	left_image_path = line[1]
-	left_image_filename = left_image_path.split('\\')[-1]
-	left_image_full_path = 'Training_data/IMG/' + left_image_filename
-	left_image = cv2.imread(left_image_full_path)
-	images.append(left_image)
-	measurement = float(line[3]) + 0.08
-	measurements.append(measurement)
+	if valid:
+		measurements.append(measurement)
 
-	right_image_path = line[2]
-	right_image_filename = right_image_path.split('\\')[-1]
-	#print(right_image_filename)
-	right_image_full_path = 'Training_data/IMG/' + right_image_filename
-	right_image = cv2.imread(right_image_full_path)
-	images.append(right_image)
-	measurement = float(line[3]) - 0.12
-	measurements.append(measurement)
+		random = randint(0,9)
+		if random <= 4:
+			left_image_path = line[1]
+			left_image_filename = left_image_path.split('\\')[-1]
+			left_image_full_path = 'Training_data/IMG/' + left_image_filename
+			left_image = cv2.imread(left_image_full_path)
+			images.append(left_image)
+			measurement = float(line[3]) + 0.08
+			measurements.append(measurement)
+
+		random = randint(0,9)
+		if random <= 4:
+			right_image_path = line[2]
+			right_image_filename = right_image_path.split('\\')[-1]
+			#print(right_image_filename)
+			right_image_full_path = 'Training_data/IMG/' + right_image_filename
+			right_image = cv2.imread(right_image_full_path)
+			images.append(right_image)
+			measurement = float(line[3]) - 0.12
+			measurements.append(measurement)
 
 
 augmented_images, augmented_measurements = [], []
