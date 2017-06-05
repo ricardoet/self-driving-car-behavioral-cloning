@@ -61,7 +61,7 @@ X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
 from keras.models import Sequential
-from keras.layers import ELU, Dropout
+from keras.layers import ELU, Dropout, SpatialDropout2D
 from keras.layers.core import Flatten, Dense, Lambda
 from keras.layers.convolutional import Cropping2D, Convolution2D
 
