@@ -41,24 +41,24 @@ for line in lines:
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 
-	if randomize(probability=10):
-		left_image_path = line[1]
-		left_image_filename = left_image_path.split('/')[-1]
-		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
-		left_image = plt.imread(left_image_full_path)
-		images.append(cropAndResize(left_image))
-		measurement = float(line[3]) + 0.3
-		measurements.append(measurement)
+		if randomize(probability=7):
+			left_image_path = line[1]
+			left_image_filename = left_image_path.split('/')[-1]
+			left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
+			left_image = plt.imread(left_image_full_path)
+			images.append(cropAndResize(left_image))
+			measurement = float(line[3]) + 0.25
+			measurements.append(measurement)
 
-	if randomize(probability=10):
-		right_image_path = line[2]
-		right_image_filename = right_image_path.split('/')[-1]
-		#print(right_image_filename)
-		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
-		right_image = plt.imread(right_image_full_path)
-		images.append(cropAndResize(right_image))
-		measurement = float(line[3]) - 0.15
-		measurements.append(measurement)
+		if randomize(probability=7):
+			right_image_path = line[2]
+			right_image_filename = right_image_path.split('/')[-1]
+			#print(right_image_filename)
+			right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
+			right_image = plt.imread(right_image_full_path)
+			images.append(cropAndResize(right_image))
+			measurement = float(line[3]) - 0.25
+			measurements.append(measurement)
 
 
 augmented_images, augmented_measurements = [], []
