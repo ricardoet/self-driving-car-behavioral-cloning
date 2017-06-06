@@ -36,7 +36,7 @@ for line in lines:
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
-	if measurement == abs(float(0)) < 0.2:
+	if 0.1 > abs(measurement):
 		if randomize(probability=2):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
