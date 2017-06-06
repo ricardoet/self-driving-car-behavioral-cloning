@@ -27,32 +27,29 @@ for line in lines:
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
-		if random >= 5:
-			valid = False
+		if random >= 3:
+			measurements.append(measurement)
 
-	if valid:
+	random = randint(0,9)
+	if random <= 10:
+		left_image_path = line[1]
+		left_image_filename = left_image_path.split('\\')[-1]
+		left_image_full_path = 'Training_data/IMG/' + left_image_filename
+		left_image = cv2.imread(left_image_full_path)
+		images.append(left_image)
+		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
 
-		random = randint(0,9)
-		if random <= 10:
-			left_image_path = line[1]
-			left_image_filename = left_image_path.split('\\')[-1]
-			left_image_full_path = 'Training_data/IMG/' + left_image_filename
-			left_image = cv2.imread(left_image_full_path)
-			images.append(left_image)
-			measurement = float(line[3]) + 0.25
-			measurements.append(measurement)
-
-		random = randint(0,9)
-		if random <= 10:
-			right_image_path = line[2]
-			right_image_filename = right_image_path.split('\\')[-1]
-			#print(right_image_filename)
-			right_image_full_path = 'Training_data/IMG/' + right_image_filename
-			right_image = cv2.imread(right_image_full_path)
-			images.append(right_image)
-			measurement = float(line[3]) - 0.25
-			measurements.append(measurement)
+	random = randint(0,9)
+	if random <= 10:
+		right_image_path = line[2]
+		right_image_filename = right_image_path.split('\\')[-1]
+		#print(right_image_filename)
+		right_image_full_path = 'Training_data/IMG/' + right_image_filename
+		right_image = cv2.imread(right_image_full_path)
+		images.append(right_image)
+		measurement = float(line[3]) - 0.25
+		measurements.append(measurement)
 
 
 augmented_images, augmented_measurements = [], []
@@ -70,44 +67,44 @@ from keras.layers import ELU, Dropout, SpatialDropout2D
 from keras.layers.core import Flatten, Dense, Lambda
 from keras.layers.convolutional import Cropping2D, Convolution2D
 
-# model = Sequential()
-# model.add(Cropping2D(cropping=((80, 25), (0,0)), input_shape=(160,320,3)))
-# model.add(Lambda(lambda x: x / 127.5 - 1))
-
-# model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
-# model.add(ELU())
-# model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
-# model.add(ELU())
-# model.add(Convolution2D(64, 5, 5, subsample=(2, 2), border_mode="same"))
-# model.add(Flatten())
-# model.add(Dropout(.2))
-# model.add(ELU())
-# model.add(Dense(512))
-# model.add(Dropout(.5))
-# model.add(ELU())
-# model.add(Dense(1))
-
 model = Sequential()
-model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5))
-model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.2))
-model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.2))
-model.add(Convolution2D(48, 5, 5, border_mode="valid", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.2))
-model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
-model.add(SpatialDropout2D(0.2))
-model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
-model.add(SpatialDropout2D(0.2))
+model.add(Cropping2D(cropping=((55, 25), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 127.5 - 1))
 
+model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
+model.add(ELU())
+model.add(Convolution2D(32, 5, 5, subsample=(2, 2), border_mode="same"))
+model.add(ELU())
+model.add(Convolution2D(64, 5, 5, subsample=(2, 2), border_mode="same"))
 model.add(Flatten())
-model.add(Dropout(0.5))
-model.add(Dense(100, activation="elu"))
-model.add(Dense(50, activation="elu"))
-model.add(Dense(10, activation="elu"))
-model.add(Dropout(0.5))
+model.add(Dropout(.2))
+model.add(ELU())
+model.add(Dense(512))
+model.add(Dropout(.5))
+model.add(ELU())
 model.add(Dense(1))
+
+# model = Sequential()
+# model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(160,320,3)))
+# model.add(Lambda(lambda x: x / 255.0 - 0.5))
+# model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
+# model.add(SpatialDropout2D(0.2))
+# model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
+# model.add(SpatialDropout2D(0.2))
+# model.add(Convolution2D(48, 5, 5, border_mode="valid", subsample=(2,2), activation="elu"))
+# model.add(SpatialDropout2D(0.2))
+# model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
+# model.add(SpatialDropout2D(0.2))
+# model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
+# model.add(SpatialDropout2D(0.2))
+
+# model.add(Flatten())
+# model.add(Dropout(0.5))
+# model.add(Dense(100, activation="elu"))
+# model.add(Dense(50, activation="elu"))
+# model.add(Dense(10, activation="elu"))
+# model.add(Dropout(0.5))
+# model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
 model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
