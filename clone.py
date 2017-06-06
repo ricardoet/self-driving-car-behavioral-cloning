@@ -26,7 +26,7 @@ for line in lines:
 	center_image_filename = center_image_path.split('/')[-1]
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
-	images.append(center_image)
+	images.append(cropAndResize(center_image))
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
@@ -38,7 +38,7 @@ for line in lines:
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
-		left_image = plt.imread(left_image_full_path)
+		left_image = plt.imread(cropAndResize(left_image_full_path))
 		images.append(left_image)
 		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
@@ -50,7 +50,7 @@ for line in lines:
 		#print(right_image_filename)
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
 		right_image = plt.imread(right_image_full_path)
-		images.append(right_image)
+		images.append(cropAndResize(right_image))
 		measurement = float(line[3]) - 0.25
 		measurements.append(measurement)
 
