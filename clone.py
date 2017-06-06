@@ -37,11 +37,11 @@ for line in lines:
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
 	if measurement == abs(float(0)) < 0.1:
-		if randomize(3):
+		if randomize(10):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 
-	if randomize():
+	if randomize(10):
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
@@ -50,7 +50,7 @@ for line in lines:
 		measurement = float(line[3]) + 0.3
 		measurements.append(measurement)
 
-	if randomize():
+	if randomize(10):
 		right_image_path = line[2]
 		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
@@ -65,10 +65,10 @@ augmented_images, augmented_measurements = [], []
 for image, measurement in zip(images, measurements):
 	augmented_images.append(image)
 	augmented_measurements.append(measurement)
-	if randomize():
+	if randomize(10):
 		augmented_images.append(np.fliplr(image))
 		augmented_measurements.append(measurement*-1.0)
-	if randomize():
+	if randomize(10):
 		image_hsv = rgb_to_hsv(image)
 		brightness = np.random.uniform() + 0.25
 		image_hsv[:,:,2] = image_hsv[:,:,2] * brightness
