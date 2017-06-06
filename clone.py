@@ -10,10 +10,10 @@ def cropAndResize(image):
 	bottom = image.shape[0] - int(np.ceil(image.shape[0] * 0.1))
 	image = image[top:bottom, :]
 
-	return scipy.misc.imresize(image, (96, 160))
+	return scipy.misc.imresize(image, (64, 64))
 
 lines = []
-with open('Udacity_data/driving_log.csv') as csvfile:
+with open('Training_data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		lines.append(line)
@@ -24,8 +24,8 @@ for line in lines:
 
 	valid = True
 	center_image_path = line[0]
-	center_image_filename = center_image_path.split('/')[-1]
-	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
+	center_image_filename = center_image_path.split('\\')[-1]
+	center_image_full_path = 'Training_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
 	if measurement == float(0):
@@ -37,8 +37,8 @@ for line in lines:
 	random = randint(0,9)
 	if random <= 5:
 		left_image_path = line[1]
-		left_image_filename = left_image_path.split('/')[-1]
-		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
+		left_image_filename = left_image_path.split('\\')[-1]
+		left_image_full_path = 'Training_data/IMG/' + left_image_filename
 		left_image = plt.imread(left_image_full_path)
 		images.append(cropAndResize(left_image))
 		measurement = float(line[3]) + 0.25
@@ -47,9 +47,9 @@ for line in lines:
 	random = randint(0,9)
 	if random <= 5:
 		right_image_path = line[2]
-		right_image_filename = right_image_path.split('/')[-1]
+		right_image_filename = right_image_path.split('\\')[-1]
 		#print(right_image_filename)
-		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
+		right_image_full_path = 'Training_data/IMG/' + right_image_filename
 		right_image = plt.imread(right_image_full_path)
 		images.append(cropAndResize(right_image))
 		measurement = float(line[3]) - 0.25
@@ -105,11 +105,11 @@ model.add(SpatialDropout2D(0.2))
 model.add(Flatten())
 model.add(Dropout(0.5))
 model.add(Dense(100, activation="elu"))
-model.add(Dropout(0.5))
+model.add(Dropout(0.2))
 model.add(Dense(50, activation="elu"))
-model.add(Dropout(0.5))
+model.add(Dropout(0.2))
 model.add(Dense(10, activation="elu"))
-model.add(Dropout(0.5))
+model.add(Dropout(0.2))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
