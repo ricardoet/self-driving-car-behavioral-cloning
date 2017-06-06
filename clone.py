@@ -35,7 +35,7 @@ for line in lines:
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
-	if measurement == abs(float(0)) < 0.5:
+	if measurement == abs(float(0)) < 0.1:
 		if randomize(3):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
@@ -56,15 +56,15 @@ for line in lines:
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
 		right_image = plt.imread(right_image_full_path)
 		images.append(cropAndResize(right_image))
-		measurement = float(line[3]) - 0.1
+		measurement = float(line[3]) - 0.15
 		measurements.append(measurement)
 
 
 augmented_images, augmented_measurements = [], []
 for image, measurement in zip(images, measurements):
+	augmented_images.append(image)
+	augmented_measurements.append(measurement)
 	if randomize():
-		augmented_images.append(image)
-		augmented_measurements.append(measurement)
 		augmented_images.append(np.fliplr(image))
 		augmented_measurements.append(measurement*-1.0)
 
