@@ -60,7 +60,7 @@ augmented_images, augmented_measurements = [], []
 for image, measurement in zip(images, measurements):
 	augmented_images.append(image)
 	augmented_measurements.append(measurement)
-	augmented_images.append(plt.flip(image, 1))
+	augmented_images.append(np.fliplr(image))
 	augmented_measurements.append(measurement*-1.0)
 
 X_train = np.array(images)
@@ -89,8 +89,8 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 # model.add(Dense(1))
 
 model = Sequential()
-model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5))
+#model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(64,64,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
