@@ -36,7 +36,7 @@ for line in lines:
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
 	if measurement == abs(float(0)) < 0.1:
-		if randomize(3):
+		if randomize(9):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 
@@ -46,7 +46,7 @@ for line in lines:
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
 		left_image = plt.imread(left_image_full_path)
 		images.append(cropAndResize(left_image))
-		measurement = float(line[3]) + 0.3
+		measurement = float(line[3]) + 0.15
 		measurements.append(measurement)
 
 	if randomize():
@@ -56,7 +56,7 @@ for line in lines:
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
 		right_image = plt.imread(right_image_full_path)
 		images.append(cropAndResize(right_image))
-		measurement = float(line[3]) - 0.3
+		measurement = float(line[3]) - 0.15
 		measurements.append(measurement)
 
 
@@ -118,6 +118,6 @@ model.add(Dropout(0.2))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.1, shuffle=True, nb_epoch=4)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=4)
 
 model.save('model.h5')
