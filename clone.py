@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from random import randint
 import matplotlib.pyplot as plt
-from matplotlib import colors
+from matplotlib.colors import rgb_to_hsv, hsv_to_rgb
 import scipy.misc
 
 def cropAndResize(image):
