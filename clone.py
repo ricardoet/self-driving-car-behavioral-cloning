@@ -20,7 +20,7 @@ for line in lines:
 
 	valid = True
 	center_image_path = line[0]
-	center_image_filename = center_image_path.split('\\')[-1]
+	center_image_filename = center_image_path.split('/')[-1]
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = cv2.imread(center_image_full_path)
 	images.append(center_image)
@@ -33,7 +33,7 @@ for line in lines:
 	random = randint(0,9)
 	if random <= 10:
 		left_image_path = line[1]
-		left_image_filename = left_image_path.split('\\')[-1]
+		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
 		left_image = cv2.imread(left_image_full_path)
 		images.append(left_image)
@@ -43,7 +43,7 @@ for line in lines:
 	random = randint(0,9)
 	if random <= 10:
 		right_image_path = line[2]
-		right_image_filename = right_image_path.split('\\')[-1]
+		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
 		right_image = cv2.imread(right_image_full_path)
