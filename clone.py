@@ -35,8 +35,8 @@ for line in lines:
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
-	if measurement == abs(float(0)) < 0.1:
-		if randomize(9):
+	if measurement == abs(float(0)) < 0.5:
+		if randomize(3):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 
@@ -118,6 +118,6 @@ model.add(Dropout(0.2))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=4)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=3)
 
 model.save('model.h5')
