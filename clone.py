@@ -20,6 +20,12 @@ def randomize(probability=4):
 	else:
 		return False
 
+def change_brightness(image):
+	image_hsv = rgb_to_hsv(image)
+	brightness = np.random.uniform() + 0.25
+	image_hsv[:,:,2] = image_hsv[:,:,2] * brightness
+	return hsv_to_rgb(image_hsv)
+
 lines = []
 with open('Udacity_data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
@@ -63,19 +69,22 @@ for line in lines:
 
 augmented_images, augmented_measurements = [], []
 for image, measurement in zip(images, measurements):
-	augmented_images.append(image)
+	if randomize(probability=5):
+		augmented_images.append(change_brightness(image))
+	else:
+		augmented_images.append(image)
 	augmented_measurements.append(measurement)
 	if randomize(probability=7):
 		augmented_images.append(np.fliplr(image))
 		augmented_measurements.append(measurement*-1.0)
-	if randomize(probability=7):
-		image_hsv = rgb_to_hsv(image)
-		brightness = np.random.uniform() + 0.25
-		image_hsv[:,:,2] = image_hsv[:,:,2] * brightness
-		image_rgb = hsv_to_rgb(image_hsv)
+	# if randomize(probability=7):
+	# 	image_hsv = rgb_to_hsv(image)
+	# 	brightness = np.random.uniform() + 0.25
+	# 	image_hsv[:,:,2] = image_hsv[:,:,2] * brightness
+	# 	image_rgb = hsv_to_rgb(image_hsv)
 
-		augmented_images.append(image_rgb)
-		augmented_measurements.append(measurement)
+	# 	augmented_images.append(image_rgb)
+	# 	augmented_measurements.append(measurement)
 
 X_train = np.array(images)
 y_train = np.array(measurements)
@@ -114,16 +123,16 @@ model.add(SpatialDropout2D(0.3))
 model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
 model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
-model.add(SpatialDropout2D(0.2))
+#model.add(SpatialDropout2D(0.2))
 
 model.add(Flatten())
-model.add(Dropout(0.5))
+model.add(Dropout(0.3))
 model.add(Dense(100, activation="elu"))
-model.add(Dropout(0.2))
+model.add(Dropout(0.5))
 model.add(Dense(50, activation="elu"))
-model.add(Dropout(0.2))
+model.add(Dropout(0.5))
 model.add(Dense(10, activation="elu"))
-model.add(Dropout(0.2))
+model.add(Dropout(0.5))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
