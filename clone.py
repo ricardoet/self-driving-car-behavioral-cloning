@@ -3,10 +3,10 @@ import cv2
 import numpy as np
 from random import randint
 
-def cropAndResizeImage(imageIn):
-    cropped = imageIn[50:25, 0:360]
-    resized = cv2.resize(cropped,(64,64))
-    return cropped
+# def cropAndResizeImage(imageIn):
+#     cropped = imageIn[50:25, 0:360]
+#     resized = cv2.resize(cropped,(64,64))
+#     return cropped
 
 lines = []
 with open('Training_data/driving_log.csv') as csvfile:
@@ -23,34 +23,34 @@ for line in lines:
 	center_image_filename = center_image_path.split('\\')[-1]
 	center_image_full_path = 'Training_data/IMG/' + center_image_filename
 	center_image = cv2.imread(center_image_full_path)
-	images.append(cropAndResizeImage(center_image))
+	images.append(center_image)
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
-		if random >= 3:
+		if random >= 10:
 			valid = False
 
 	if valid:
 		measurements.append(measurement)
 
 		random = randint(0,9)
-		if random <= 4:
+		if random <= 10:
 			left_image_path = line[1]
 			left_image_filename = left_image_path.split('\\')[-1]
 			left_image_full_path = 'Training_data/IMG/' + left_image_filename
 			left_image = cv2.imread(left_image_full_path)
-			images.append(cropAndResizeImage(left_image))
+			images.append(left_image)
 			measurement = float(line[3]) + 0.25
 			measurements.append(measurement)
 
 		random = randint(0,9)
-		if random <= 4:
+		if random <= 10:
 			right_image_path = line[2]
 			right_image_filename = right_image_path.split('\\')[-1]
 			#print(right_image_filename)
 			right_image_full_path = 'Training_data/IMG/' + right_image_filename
 			right_image = cv2.imread(right_image_full_path)
-			images.append(cropAndResizeImage(right_image))
+			images.append(right_image)
 			measurement = float(line[3]) - 0.25
 			measurements.append(measurement)
 
@@ -88,8 +88,8 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 # model.add(Dense(1))
 
 model = Sequential()
-#model.add(Cropping2D(cropping=((50, 25), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5), input_shape=(64,64,3))
+model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(SpatialDropout2D(0.4))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
