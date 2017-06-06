@@ -23,7 +23,7 @@ for line in lines:
 	center_image_filename = center_image_path.split('\\')[-1]
 	center_image_full_path = 'Training_data/IMG/' + center_image_filename
 	center_image = cv2.imread(center_image_full_path)
-	images.append(center_image)
+	images.append(cropAndResizeImage(center_image))
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
@@ -39,7 +39,7 @@ for line in lines:
 			left_image_filename = left_image_path.split('\\')[-1]
 			left_image_full_path = 'Training_data/IMG/' + left_image_filename
 			left_image = cv2.imread(left_image_full_path)
-			images.append(left_image)
+			images.append(cropAndResizeImage(left_image))
 			measurement = float(line[3]) + 0.25
 			measurements.append(measurement)
 
@@ -50,7 +50,7 @@ for line in lines:
 			#print(right_image_filename)
 			right_image_full_path = 'Training_data/IMG/' + right_image_filename
 			right_image = cv2.imread(right_image_full_path)
-			images.append(right_image)
+			images.append(cropAndResizeImage(right_image))
 			measurement = float(line[3]) - 0.25
 			measurements.append(measurement)
 
@@ -64,8 +64,6 @@ for image, measurement in zip(images, measurements):
 
 X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
-
-X_train = cropAndResizeImage(X_train)
 
 from keras.models import Sequential
 from keras.layers import ELU, Dropout, SpatialDropout2D
