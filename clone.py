@@ -3,6 +3,11 @@ import cv2
 import numpy as np
 from random import randint
 
+def cropAndResizeImage(imageIn):
+    cropped = imageIn[50:25, 0:360]
+    resized = cv2.resize(cropped,(64,64))
+    return cropped
+
 lines = []
 with open('Training_data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
@@ -60,6 +65,8 @@ for image, measurement in zip(images, measurements):
 X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
+X_train = cropAndResizeImage(X_train)
+
 from keras.models import Sequential
 from keras.layers import ELU, Dropout, SpatialDropout2D
 from keras.layers.core import Flatten, Dense, Lambda
@@ -83,8 +90,8 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 # model.add(Dense(1))
 
 model = Sequential()
-model.add(Cropping2D(cropping=((50, 25), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5))
+#model.add(Cropping2D(cropping=((50, 25), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5), input_shape=(64,64,3))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(SpatialDropout2D(0.4))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
