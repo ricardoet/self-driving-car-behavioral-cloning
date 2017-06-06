@@ -69,7 +69,7 @@ for line in lines:
 
 augmented_images, augmented_measurements = [], []
 for image, measurement in zip(images, measurements):
-	if randomize(probability=5):
+	if randomize(probability=10):
 		augmented_images.append(change_brightness(image))
 	else:
 		augmented_images.append(image)
@@ -115,15 +115,15 @@ model = Sequential()
 #model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
 model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(64,64,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.1))
+model.add(Dropout(0.1))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.2))
+model.add(Dropout(0.2))
 model.add(Convolution2D(48, 5, 5, border_mode="valid", subsample=(2,2), activation="elu"))
-model.add(SpatialDropout2D(0.3))
+model.add(Dropout(0.3))
 model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
-model.add(SpatialDropout2D(0.2))
+model.add(Dropout(0.2))
 model.add(Convolution2D(64, 3, 3, border_mode="valid", activation="elu"))
-#model.add(SpatialDropout2D(0.2))
+#model.add(Dropout(0.2))
 
 model.add(Flatten())
 model.add(Dropout(0.3))
