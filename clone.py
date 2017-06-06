@@ -12,9 +12,9 @@ def cropAndResize(image):
 
 	return scipy.misc.imresize(image, (64, 64))
 
-def randomize(probability=5):
+def randomize(probability=4):
 	random = randint(0,9)
-	if random < probability:
+	if random <= probability:
 		return True	
 	else:
 		return False
@@ -35,31 +35,28 @@ for line in lines:
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
-	if measurement == abs(float(0)) < 0.5:
-		random = randint(0,9)
-		if random >= 7:
+	if measurement == abs(float(0)) < 0.1:
+		if randomize(3):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 
-	random = randint(0,9)
-	if random <= 5:
+	if randomize():
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
 		left_image = plt.imread(left_image_full_path)
 		images.append(cropAndResize(left_image))
-		measurement = float(line[3]) + 0.25
+		measurement = float(line[3]) + 0.3
 		measurements.append(measurement)
 
-	random = randint(0,9)
-	if random <= 5:
+	if randomize():
 		right_image_path = line[2]
 		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
 		right_image = plt.imread(right_image_full_path)
 		images.append(cropAndResize(right_image))
-		measurement = float(line[3]) - 0.25
+		measurement = float(line[3]) - 0.3
 		measurements.append(measurement)
 
 
@@ -121,6 +118,6 @@ model.add(Dropout(0.2))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.3, shuffle=True, nb_epoch=4)
+model.fit(X_train, y_train, validation_split=0.1, shuffle=True, nb_epoch=4)
 
 model.save('model.h5')
