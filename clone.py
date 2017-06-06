@@ -10,7 +10,7 @@ def cropAndResize(image):
 	bottom = image.shape[0] - int(np.ceil(image.shape[0] * 0.1))
 	image = image[top:bottom, :]
 
-	return scipy.misc.imresize(image, (48, 160))
+	return scipy.misc.imresize(image, (96, 160))
 
 lines = []
 with open('Udacity_data/driving_log.csv') as csvfile:
@@ -90,7 +90,7 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 #model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(48,160,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(96,160,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
