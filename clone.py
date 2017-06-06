@@ -2,11 +2,14 @@ import csv
 import cv2
 import numpy as np
 from random import randint
+import matplotlib.pyplot as plt
 
-# def cropAndResizeImage(imageIn):
-#     cropped = imageIn[50:25, 0:360]
-#     resized = cv2.resize(cropped,(64,64))
-#     return cropped
+def cropAndResize(image):
+	top = int(np.ceil(image.shape[0] * 0.3))
+	bottom = image.shape[0] - int(np.ceil(image.shape[0] * 0.1))
+	image = image[top:bottom, :]
+
+	return scipy.misc.imresize(image, (64, 64))
 
 lines = []
 with open('Udacity_data/driving_log.csv') as csvfile:
@@ -22,7 +25,7 @@ for line in lines:
 	center_image_path = line[0]
 	center_image_filename = center_image_path.split('/')[-1]
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
-	center_image = cv2.imread(center_image_full_path)
+	center_image = plt.imread(center_image_full_path)
 	images.append(center_image)
 	measurement = float(line[3])
 	if measurement == float(0):
@@ -35,7 +38,7 @@ for line in lines:
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
-		left_image = cv2.imread(left_image_full_path)
+		left_image = plt.imread(left_image_full_path)
 		images.append(left_image)
 		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
@@ -46,21 +49,21 @@ for line in lines:
 		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
 		right_image_full_path = 'Udacity_data/IMG/' + right_image_filename
-		right_image = cv2.imread(right_image_full_path)
+		right_image = plt.imread(right_image_full_path)
 		images.append(right_image)
 		measurement = float(line[3]) - 0.25
 		measurements.append(measurement)
 
 
-augmented_images, augmented_measurements = [], []
-for image, measurement in zip(images, measurements):
-	augmented_images.append(image)
-	augmented_measurements.append(measurement)
-	augmented_images.append(cv2.flip(image, 1))
-	augmented_measurements.append(measurement*-1.0)
+# augmented_images, augmented_measurements = [], []
+# for image, measurement in zip(images, measurements):
+# 	augmented_images.append(image)
+# 	augmented_measurements.append(measurement)
+# 	augmented_images.append(plt.flip(image, 1))
+# 	augmented_measurements.append(measurement*-1.0)
 
-X_train = np.array(augmented_images)
-y_train = np.array(augmented_measurements)
+X_train = np.array(images)
+y_train = np.array(measurements)
 
 from keras.models import Sequential
 from keras.layers import ELU, Dropout, SpatialDropout2D
@@ -68,8 +71,8 @@ from keras.layers.core import Flatten, Dense, Lambda
 from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
-model.add(Cropping2D(cropping=((55, 25), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 127.5 - 1))
+#model.add(Cropping2D(cropping=((55, 25), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 127.5 - 1, input_shape=(160,320,3)))
 
 model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
 model.add(ELU())
