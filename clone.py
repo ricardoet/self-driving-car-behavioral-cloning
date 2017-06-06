@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from random import randint
 import matplotlib.pyplot as plt
+from matplotlib import colors
 import scipy.misc
 
 def cropAndResize(image):
@@ -67,6 +68,14 @@ for image, measurement in zip(images, measurements):
 	if randomize():
 		augmented_images.append(np.fliplr(image))
 		augmented_measurements.append(measurement*-1.0)
+	if randomize():
+		image_hsv = rgb_to_hsv(image)
+		brightness = np.random.uniform() + 0.25
+		image_hsv[:,:,2] = image_hsv[:,:,2] * brightness
+		image_rgb = hsv_to_rgb(image_hsv)
+
+		augmented_images.append(image_rgb)
+		augmented_measurements.append(measurement)
 
 X_train = np.array(images)
 y_train = np.array(measurements)
