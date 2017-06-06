@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from random import randint
 import matplotlib.pyplot as plt
+import scipy.misc
 
 def cropAndResize(image):
 	top = int(np.ceil(image.shape[0] * 0.3))
@@ -26,20 +27,20 @@ for line in lines:
 	center_image_filename = center_image_path.split('/')[-1]
 	center_image_full_path = 'Udacity_data/IMG/' + center_image_filename
 	center_image = plt.imread(center_image_full_path)
-	images.append(cropAndResize(center_image))
 	measurement = float(line[3])
 	if measurement == float(0):
 		random = randint(0,9)
 		if random >= 3:
 			measurements.append(measurement)
+			images.append(cropAndResize(center_image))
 
 	random = randint(0,9)
 	if random <= 10:
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
-		left_image = plt.imread(cropAndResize(left_image_full_path))
-		images.append(left_image)
+		left_image = plt.imread(left_image_full_path)
+		images.append(cropAndResize(left_image))
 		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
 
@@ -72,7 +73,7 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 #model.add(Cropping2D(cropping=((55, 25), (0,0)), input_shape=(160,320,3)))
-model.add(Lambda(lambda x: x / 127.5 - 1, input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 127.5 - 1, input_shape=(64,64,3)))
 
 model.add(Convolution2D(16, 8, 8, subsample=(4, 4), border_mode="same"))
 model.add(ELU())
