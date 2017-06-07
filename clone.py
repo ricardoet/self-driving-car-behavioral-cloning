@@ -44,7 +44,7 @@ for line in lines:
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
 	if 0.1 > abs(measurement):
-		if randomize(probability=10):
+		if randomize(probability=3):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 		else:
@@ -53,7 +53,7 @@ for line in lines:
 		measurements.append(measurement)
 		images.append(cropAndResize(center_image))
 
-	if randomize(probability=10) and valid:
+	if randomize(probability=10):
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
@@ -62,7 +62,7 @@ for line in lines:
 		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
 
-	if randomize(probability=10) and valid:
+	if randomize(probability=10):
 		right_image_path = line[2]
 		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
