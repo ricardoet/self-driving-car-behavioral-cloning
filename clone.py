@@ -11,10 +11,10 @@ def cropAndResize(image):
 	bottom = image.shape[0] - int(np.ceil(image.shape[0] * 0.1))
 	image = image[top:bottom, :]
 
-	#return scipy.misc.imresize(image, (64, 64))
-	return image
+	return scipy.misc.imresize(image, (64, 64))
+	#return image
 
-def randomize(probability=4):
+def randomize(probability):
 	random = randint(0,9)
 	if random <= probability:
 		return True	
@@ -44,7 +44,7 @@ for line in lines:
 	center_image = plt.imread(center_image_full_path)
 	measurement = float(line[3])
 	if 0.1 > abs(measurement):
-		if randomize(probability=2):
+		if randomize(probability=10):
 			measurements.append(measurement)
 			images.append(cropAndResize(center_image))
 		else:
@@ -53,7 +53,7 @@ for line in lines:
 		measurements.append(measurement)
 		images.append(cropAndResize(center_image))
 
-	if randomize(probability=7) and valid:
+	if randomize(probability=10) and valid:
 		left_image_path = line[1]
 		left_image_filename = left_image_path.split('/')[-1]
 		left_image_full_path = 'Udacity_data/IMG/' + left_image_filename
@@ -62,7 +62,7 @@ for line in lines:
 		measurement = float(line[3]) + 0.25
 		measurements.append(measurement)
 
-	if randomize(probability=7) and valid:
+	if randomize(probability=10) and valid:
 		right_image_path = line[2]
 		right_image_filename = right_image_path.split('/')[-1]
 		#print(right_image_filename)
@@ -80,7 +80,7 @@ for image, measurement in zip(images, measurements):
 	else:
 		augmented_images.append(image)
 	augmented_measurements.append(measurement)
-	if randomize(probability=7):
+	if randomize(probability=10):
 		augmented_images.append(np.fliplr(image))
 		augmented_measurements.append(measurement*-1.0)
 	# if randomize(probability=7):
@@ -119,7 +119,7 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 #model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(96,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(64,64,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(Dropout(0.1))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
