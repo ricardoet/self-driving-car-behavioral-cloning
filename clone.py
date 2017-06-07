@@ -119,7 +119,7 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 #model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(96,320,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(Dropout(0.1))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
