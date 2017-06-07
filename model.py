@@ -188,8 +188,8 @@ if __name__=="__main__":
 	model.fit_generator(batch_generator(X_train, y_train), samples_per_epoch=4096, nb_epoch=4, validation_data=batch_generator(X_validation, y_validation), nb_val_samples=1024)
 
 	print('Saving model weights and configuration file.')
-	model.save_weights('model.h5')
-	with open('model.json', 'w') as outfile:
-		json.dump(model.to_json(), outfile)
+	model.save('model.h5')
+	# with open('model.json', 'w') as outfile:
+	# 	json.dump(model.to_json(), outfile)
 
-	K.clear_session()
+	# K.clear_session()
