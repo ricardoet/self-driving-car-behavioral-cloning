@@ -1,11 +1,15 @@
 import csv
-import cv2
-import numpy as np
+import random
 from random import randint
+import cv2
+import json
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import rgb_to_hsv, hsv_to_rgb
 import scipy.misc
 from keras import backend as K 
+from sklearn.utils import shuffle
+from sklearn.model_selection import train_test_split
 
 
 def cropAndResize(image):
@@ -145,47 +149,47 @@ def get_image_names_and_labels():
 	image_names = []
 	measurements = []
 	for line in lines:
-		measurement = float(measurement)
-		image_names.append(process_full_path(line[0]), process_full_path(line[1]), process_full_path(line[2]))
-		measurements.append(measurement, measurement+0.25, measurement-0.25)
+		measurement = float(line[3])
+		image_names.append([process_full_path(line[0]), process_full_path(line[1]), process_full_path(line[2])])
+		measurements.append([measurement, measurement+0.25, measurement-0.25])
 
 	return image_names, measurements
 
 def batch_generator(X_train, y_train, batch_size=128):
 	images = np.zeros((batch_size, 64, 64, 3), dtype=np.float32)
 	measurements = np.zeros((batch_size,), dtype=np.float32)
+	while 1:
+		for i in range(batch_size):
+			index = random.randrange(len(X_train))
+			image_index = random.randrange(len(X_train[0]))
 
-	for i in range(batch_size):
-		index` = random.randrange(len(X_train))
-		image_index = random.randrange(len(X_train[0]))
+			measurement = float(y_train[index][image_index])
+			image = plt.imread(X_train[index][image_index])
 
-		measurement = float(y_train[index][image_index])
-		image = plt.imread(X_train[index][image_index])
+			image = change_brightness(image)
+			image = cropAndResize(image)
 
-		image = change_brightness(image)
-		image = cropAndResize(image)
+			if randomize(5):
+				image = np.fliplr(image)
+				measurement = -measurement
 
-		if randomize(5):
-			image = np.flipr(image)
-			measurement = -measurement
-
-		images[i] = image
-		measurements[i] = measurement
-
-	yield images, measurements
+			images[i] = image
+			measurements[i] = measurement
+		#print (np.array(images).shape)
+		yield (np.array(images), np.array(measurements))
 
 if __name__=="__main__":
 	X_train, y_train = get_image_names_and_labels()
 	X_train, y_train = shuffle(X_train, y_train)
 	X_train, X_validation, y_train, y_validation = train_test_split(X_train, y_train, test_size=0.2)
 
-	model = get_model()
+	model = model()
 	model.summary()
-	model.fit_generator(generate_batch(X_train, y_train), samples_per_epoch=10000, nb_epoch=28, validation_data=generate_batch(X_validation, y_validation), nb_val_samples=1024)
+	model.fit_generator(batch_generator(X_train, y_train), samples_per_epoch=4096, nb_epoch=4, validation_data=batch_generator(X_validation, y_validation), nb_val_samples=1024)
 
 	print('Saving model weights and configuration file.')
 	model.save_weights('model.h5')
 	with open('model.json', 'w') as outfile:
 		json.dump(model.to_json(), outfile)
 
-    K.clear_session()
+	K.clear_session()
