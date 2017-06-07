@@ -49,6 +49,9 @@ for line in lines:
 			images.append(cropAndResize(center_image))
 		else:
 			valid = False
+	else:
+		measurements.append(measurement)
+		images.append(cropAndResize(center_image))
 
 	if randomize(probability=7) and valid:
 		left_image_path = line[1]
