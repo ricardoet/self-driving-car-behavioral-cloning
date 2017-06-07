@@ -11,7 +11,8 @@ def cropAndResize(image):
 	bottom = image.shape[0] - int(np.ceil(image.shape[0] * 0.1))
 	image = image[top:bottom, :]
 
-	return scipy.misc.imresize(image, (64, 64))
+	#return scipy.misc.imresize(image, (64, 64))
+	return image
 
 def randomize(probability=4):
 	random = randint(0,9)
@@ -115,7 +116,7 @@ from keras.layers.convolutional import Cropping2D, Convolution2D
 
 model = Sequential()
 #model.add(Cropping2D(cropping=((55, 20), (0,0)), input_shape=(64,64,3)))
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(64,64,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
 model.add(Convolution2D(24, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
 model.add(Dropout(0.1))
 model.add(Convolution2D(36, 5, 5, border_mode="same", subsample=(2,2), activation="elu"))
